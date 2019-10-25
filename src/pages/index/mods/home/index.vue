@@ -166,6 +166,7 @@ export default{
 		randomStart(){
 			let tempCheck = []
 			let tempCount = []
+			let checkCounter = 0
 			this.allData.map((item,index) => {
 				let randomBool = Math.random()
 				let randomCount = parseInt(Math.random() * item.list.length) + 1
@@ -176,6 +177,14 @@ export default{
 				}
 				tempCount.push(randomCount)
 			})
+			tempCheck.map((item,index) => {
+				if(item == true){
+					checkCounter ++
+				}
+			})
+			if(checkCounter == 0){
+				tempCheck[parseInt(Math.random() * item.list.length)] = true
+			}
 			this.$store.commit('setCheck',[])
 			this.$store.commit('setCount',[])
 			this.$store.commit('setCheck',tempCheck)
