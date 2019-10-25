@@ -29,6 +29,7 @@
 				<th>错误题数</th>
 				<th>未答题数</th>
 				<th>正确率</th>
+				<th>用时</th>
 				<th>操作</th>
 			</tr>
 			<tr v-for="(item,index) in timeList">
@@ -37,6 +38,7 @@
 				<td>{{item.error}}</td>
 				<td>{{item.undone}}</td>
 				<td :class="parseInt(item.precent) >= 80 ? 'a' : (parseInt(item.precent) < 80 && parseInt(item.precent) >= 60 ? 'b' : 'c')">{{item.precent}}</td>
+				<td>{{item.timeUsed}}</td>
 				<td :attr-time="item.time" @click="deleteCase($event)">删除</td>
 			</tr>
 		</table>
@@ -63,7 +65,9 @@ export default{
 				error:'',
 				undone:''
 			},
-			timeList:[]
+			timeList:[],
+			timeUsed:0,
+			timer:''
 		}
 	},
 	methods:{
@@ -77,6 +81,7 @@ export default{
 				_this.result.undone = document.querySelectorAll('.undone').length
 				_this.result.error = document.querySelectorAll('.error').length
 				_this.result.correct = document.querySelectorAll('.correct').length - document.querySelectorAll('.error').length
+				clearInterval(_this.timer)
 				_this.$store.commit('setSave',false)
 			})
 		},
@@ -90,8 +95,16 @@ export default{
 				localStorage.setItem('pmpResult',JSON.stringify(tempData))
 			}
 			let tempTime = new Date().getFullYear() + '-' + this.initTime(parseInt(new Date().getMonth() + 1)) + '-' + this.initTime(new Date().getDate()) + ' ' + this.initTime(new Date().getHours()) + ':' + this.initTime(new Date().getMinutes()) + ':' + this.initTime(new Date().getSeconds())
+			let tempUsedTime = ''
+			if(this.timeUsed < 60){
+				tempUsedTime = this.timeUsed + '秒'
+			}else if(this.timeUsed >= 60 && this.timeUsed < 3600){
+				tempUsedTime = parseInt(this.timeUsed / 60) + '分钟' + this.timeUsed % 60 + '秒'
+			}else if(this.timeUsed >= 3600){
+				tempUsedTime = parseInt(this.timeUsed / 3600) + '小时' + parseInt(this.timeUsed % 3600 / 60) + '分钟' + (this.timeUsed % 3600) % 60 + '秒'
+			}
 			tempData = JSON.parse(localStorage.getItem('pmpResult'))
-			tempData.push({time:tempTime,correct:this.result.correct,error:this.result.error,undone:this.result.undone,precent:(parseInt(this.result.correct) / parseInt(this.result.correct + this.result.undone + this.result.error) * 100).toFixed(2) + '%'})
+			tempData.push({time:tempTime,correct:this.result.correct,error:this.result.error,undone:this.result.undone,precent:(parseInt(this.result.correct) / parseInt(this.result.correct + this.result.undone + this.result.error) * 100).toFixed(2) + '%',timeUsed:tempUsedTime})
 			localStorage.setItem('pmpResult',JSON.stringify(tempData))
 			this.timeList = JSON.parse(localStorage.getItem('pmpResult'))
 			this.$store.commit('setSave',true)
@@ -134,7 +147,7 @@ export default{
 		},
 		getAllData(){
 			this.timeList = JSON.parse(localStorage.getItem('pmpResult'))
-			getData({method:'get',url:'./mock/exercises.json'})
+			getData({method:'get',url:'./../mock/exercises.json'})
 			.then((res) => {
 				this.allData = res.resData.data
 				let tempData = []
@@ -215,9 +228,13 @@ export default{
 				return false
 			}else{
 				setTimeout(() => {
+					_this.timeUsed = 0
 					_this.$store.commit('setStart',true)
 					_this.$store.commit('setDone',false)
 				})
+				this.timer = setInterval(() => {
+					_this.timeUsed ++
+				},1000)
 			}
 		}
 	},
