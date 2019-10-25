@@ -183,7 +183,7 @@ export default{
 				}
 			})
 			if(checkCounter == 0){
-				tempCheck[parseInt(Math.random() * item.list.length)] = true
+				tempCheck[parseInt(Math.random() * tempCheck.length)] = true
 			}
 			this.$store.commit('setCheck',[])
 			this.$store.commit('setCount',[])
