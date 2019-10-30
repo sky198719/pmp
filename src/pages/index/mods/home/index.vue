@@ -30,6 +30,7 @@
 				<th>未答题数</th>
 				<th>正确率</th>
 				<th>用时</th>
+				<th>题库说明</th>
 				<th>操作</th>
 			</tr>
 			<tr v-for="(item,index) in timeList">
@@ -39,6 +40,7 @@
 				<td>{{item.undone}}</td>
 				<td :class="parseInt(item.precent) >= 80 ? 'a' : (parseInt(item.precent) < 80 && parseInt(item.precent) >= 60 ? 'b' : 'c')">{{item.precent}}</td>
 				<td>{{item.timeUsed}}</td>
+				<td>{{item.info}}</td>
 				<td :attr-time="item.time" @click="deleteCase($event)">删除</td>
 			</tr>
 		</table>
@@ -103,8 +105,18 @@ export default{
 			}else if(this.timeUsed >= 3600){
 				tempUsedTime = parseInt(this.timeUsed / 3600) + '小时' + parseInt(this.timeUsed % 3600 / 60) + '分钟' + (this.timeUsed % 3600) % 60 + '秒'
 			}
+			let tempInfo = ''
+			this.$store.state.check.map((item,index) => {
+				if(item == true){
+					this.$store.state.count.map((item2,index2) => {
+						if(index == index2){
+							tempInfo = tempInfo + '第' + (index + 1) + '章:' + item2 + '题；'
+						}
+					})
+				}
+			})
 			tempData = JSON.parse(localStorage.getItem('pmpResult'))
-			tempData.push({time:tempTime,correct:this.result.correct,error:this.result.error,undone:this.result.undone,precent:(parseInt(this.result.correct) / parseInt(this.result.correct + this.result.undone + this.result.error) * 100).toFixed(2) + '%',timeUsed:tempUsedTime})
+			tempData.push({time:tempTime,correct:this.result.correct,error:this.result.error,undone:this.result.undone,precent:(parseInt(this.result.correct) / parseInt(this.result.correct + this.result.undone + this.result.error) * 100).toFixed(2) + '%',timeUsed:tempUsedTime,info:tempInfo})
 			localStorage.setItem('pmpResult',JSON.stringify(tempData))
 			this.timeList = JSON.parse(localStorage.getItem('pmpResult'))
 			this.$store.commit('setSave',true)
