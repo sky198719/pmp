@@ -208,6 +208,7 @@ export default{
 			this.listData = []
 			let tempData = []
 			let tempCounter = 0
+			let tempList = []
 			this.$store.state.check.map((item,index) => {
 				if(item == true){
 					tempData.push([])
@@ -229,9 +230,10 @@ export default{
 			})
 			this.initArray(tempData).map((item,index) => {
 				item.map((item2,index2) => {
-					this.listData.push({answer:this.initArray(item2.answer),problem:item2.problem,key:item2.key,explain:item2.explain})
+					tempList.push({answer:this.initArray(item2.answer),problem:item2.problem,key:item2.key,explain:item2.explain})
 				})
 			})
+			this.listData = this.initArray(tempList)
 			if(this.listData.length <= 0){
 				alert('至少选择一套题目！')
 				return false
