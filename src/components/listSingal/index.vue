@@ -1,6 +1,6 @@
 <template>
 	<div class="listSingal">
-		<img :src="'./../../assets/images/' + pic + '.jpg'" v-if="pic != '' && pic != undefined && pic != null" />
+		<img :src="'../../pic/' + pic + '.jpg'" v-if="pic != '' && pic != undefined && pic != null" />
 		<strong>{{index}}.{{problem}}</strong>
 		<dl>
 			<dd v-for="(item,index) in answer">

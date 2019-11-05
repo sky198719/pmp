@@ -128,7 +128,8 @@ module.exports = {
       }
     }),
     new copyPlugin([
-      {from:'src/mock',to:'mock'}
+      {from:'src/mock',to:'mock'},
+      {from:'src/assets/pic',to:'pic'}
     ]),
     new cleanPlugin(
       ['production'],
