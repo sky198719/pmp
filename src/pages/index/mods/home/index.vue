@@ -7,7 +7,7 @@
 		</ul>
 		<ul v-if="$store.state.start == true">
 			<li v-for="(item,index) in listData">
-				<ListSingal :index="index + 1" :problem="item.problem" :answer="item.answer" :explain="item.explain" :trueanswer="item.key"></ListSingal>
+				<ListSingal :index="index + 1" :problem="item.problem" :answer="item.answer" :explain="item.explain" :trueanswer="item.key" :pic="item.pic"></ListSingal>
 			</li>
 		</ul>
 		<button @click="startExcises()" v-if="$store.state.start == false">开始答题</button>
@@ -110,7 +110,21 @@ export default{
 				if(item == true){
 					this.$store.state.count.map((item2,index2) => {
 						if(index == index2){
-							tempInfo = tempInfo + '第' + (index + 1) + '章:' + item2 + '题；'
+							let tempIndex = ''
+							if(index == 13){
+								tempIndex = 'x1'
+							}else if(index == 14){
+								tempIndex = 'x2'
+							}else if(index == 15){
+								tempIndex = 'x3'
+							}else if(index == 16){
+								tempIndex = 'x4'
+							}else if(index == 17){
+								tempIndex = 'x5'
+							}else{
+								tempIndex = index +1
+							}
+							tempInfo = tempInfo + '第' + tempIndex + '章:' + item2 + '题；'
 						}
 					})
 				}
@@ -242,7 +256,7 @@ export default{
 			})
 			this.initArray(tempData).map((item,index) => {
 				item.map((item2,index2) => {
-					tempList.push({answer:this.initArray(item2.answer),problem:item2.problem,key:item2.key,explain:item2.explain})
+					tempList.push({answer:this.initArray(item2.answer),problem:item2.problem,pic:item2.problem_img,key:item2.key,explain:item2.explain})
 				})
 			})
 			this.listData = this.initArray(tempList)

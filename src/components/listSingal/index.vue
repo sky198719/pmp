@@ -1,5 +1,6 @@
 <template>
 	<div class="listSingal">
+		<img :src="'./../../assets/images/' + pic + '.jpg'" v-if="pic != '' && pic != undefined && pic != null" />
 		<strong>{{index}}.{{problem}}</strong>
 		<dl>
 			<dd v-for="(item,index) in answer">
@@ -26,7 +27,8 @@ export default{
 		problem:'',
 		answer:'',
 		explain:'',
-		trueanswer:''
+		trueanswer:'',
+		pic:''
 	},
 	methods:{
 		checkAnswer(e){
