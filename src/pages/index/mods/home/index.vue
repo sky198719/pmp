@@ -38,7 +38,7 @@
 				<td>{{item.correct}}</td>
 				<td>{{item.error}}</td>
 				<td>{{item.undone}}</td>
-				<td :class="parseInt(item.precent) >= 80 ? 'a' : (parseInt(item.precent) < 80 && parseInt(item.precent) >= 60 ? 'b' : 'c')">{{item.precent}}</td>
+				<td :class="parseInt(item.precent) >= 80 ? 'a' : (parseInt(item.precent) < 80 && parseInt(item.precent) >= 70 ? 'b' : 'c')">{{item.precent}}</td>
 				<td>{{item.timeUsed}}</td>
 				<td>{{item.info}}</td>
 				<td :attr-time="item.time" @click="deleteCase($event)">删除</td>
